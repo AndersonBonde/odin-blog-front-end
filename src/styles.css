@@ -5,5 +5,60 @@
 }
 
 body {
-  margin: 50px;
+  margin: 1.35rem;
+}
+
+.container {
+  --container-padding: 1rem;
+  width: 800px;
+  background-color: lightskyblue;
+  margin-inline: auto;
+  border-radius: 10px;
+}
+
+/* 
+** --- Header ---
+*/
+
+header {
+  min-height: fit-content;
+  padding: var(--container-padding);
+}
+
+.header-list {
+  display: flex;
+  justify-content: end;
+  gap: .5rem;
+  list-style: none;
+}
+
+.login-button {
+  display: inline-block;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 6px 12px;
+  text-decoration: none;
+  color: black;
+}
+
+.login-button:hover {
+  outline: 1px solid black;
+}
+
+/* 
+** --- Main ---
+*/
+
+main {
+  min-height: 80vh;
+  padding: var(--container-padding);
+}
+
+/* 
+** --- Footer ---
+*/
+
+footer {
+  min-height: 10vh;
+  padding: var(--container-padding);
 }
