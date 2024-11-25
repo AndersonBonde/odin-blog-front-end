@@ -47,9 +47,14 @@
         if (data.token) {
           localStorage.setItem('token', data.token);
 
+          console.log('Login successful');
           loginForm.reset();
+
+          window.location.href = './index.html';
         } else {
-          console.log('Login failed', data.errors);
+          console.log('Login failed', data.message);
+
+          loginForm.reset();
         }
       })
       .catch((error) => {
