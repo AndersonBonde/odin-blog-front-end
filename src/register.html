@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+</head>
+<body>
+  <div class="register-container">
+    <header>
+      <h1>Register</h1>
+    </header>
+    <main>
+      <form id="register-form">
+        <div class="form-item">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required>
+        </div>
+        <div class="form-item">
+          <label for="firstname">First name</label>
+          <input type="text" name="firstname" id="firstname" required>
+        </div>
+        <div class="form-item">
+          <label for="lastname">Last name</label>
+          <input type="text" name="lastname" id="lastname" required>
+        </div>
+        <div class="form-item">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+        </div>
+        <div class="form-item">
+          <label for="password_confirm">Comfirm your password</label>
+          <input type="password" name="password_confirm" id="password_confirm">
+        </div>
+        <p class="errors"></p>
+        <button type="submit">Create account</button>
+      </form>
+    </main>
+  </div>
+  <script>
+    const registerForm = document.getElementById('register-form');
+
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const firstname = document.getElementById('firstname').value;
+      const lastname = document.getElementById('lastname').value; 
+      const password = document.getElementById('password').value;
+      const password_confirm = document.getElementById('password_confirm').value;
+
+      fetch('http://localhost:3000/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, firstname, lastname, password, password_confirm })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+
+          console.log('Register successful');
+          registerForm.reset();
+
+          window.location.href = './index.html';
+        } else {
+          const errorsP = document.querySelector('.errors');
+          errorsP.textContent = data.errors.errors[0].msg;
+
+          console.log('Register failed', data.message, data.errors);
+
+          registerForm.reset();
+        }
+      })
+      .catch((error) => {
+        console.log('Error logging in', error);
+        registerForm.reset();
+      });
+    })
+  </script>
+</body>
+</html>

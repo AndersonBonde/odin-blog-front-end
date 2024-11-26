@@ -12,7 +12,7 @@ body {
 .container {
   --container-padding: 1rem;
   width: 800px;
-  background-color: lightskyblue;
+  background-color: white;
   margin-inline: auto;
   border-radius: 10px;
 }
@@ -35,9 +35,9 @@ header {
 
 .login-button {
   display: inline-block;
-  background-color: white;
+  background-color: rgb(124, 199, 245);
   border-radius: 1rem;
-  padding: 6px 12px;
+  padding: 10px 20px;
   text-decoration: none;
   color: black;
 }
@@ -65,10 +65,11 @@ footer {
 }
 
 /* 
-** --- Login page
+** --- Login page && Register page
 */
 
-.login-container {
+.login-container,
+.register-container {
   background-color: white;
   border-radius: 1rem;
   width: 600px;
@@ -77,18 +78,21 @@ footer {
   margin-top: 12rem;
 }
 
-.login-container header {
+.login-container header,
+.register-container header {
   padding: 1rem;
   text-align: center;
 }
 
-.login-container main {
+.login-container main,
+.register-container main {
   min-height: unset;
   margin-bottom: 1rem;
   padding: 1rem;
 }
 
-#login-form {
+#login-form,
+#register-form {
   display: flex;
   flex-direction: column;
 }
