@@ -9,17 +9,50 @@
   <div class="container">
     <header>
       <ul class="header-list">
-        <li>
-          <a class="login-button" href="./login.html">Login</a>
+        <li class="user-info">
+
+        </li>
+        <li class="login-button">
+          <a href="./login.html">Login</a>
+        </li>
+        <li class="logout-button">
+          <a href="">Logout</a>
         </li>
       </ul>
     </header>
     <main>
-      <p>Blog WIP</p>
+
     </main>
     <footer>
-      <p>Footer WIP</p>
+
     </footer>
   </div>
+  <script>
+    const token = localStorage.getItem('token');
+    const loginButton = document.querySelector('.login-button');
+    const logoutButton = document.querySelector('.logout-button');
+    const userInfo = document.querySelector('.user-info');
+
+    if (token) {
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      userInfo.textContent = 'User: ' + user.firstname + ' ' + user.lastname;
+
+      loginButton.style.display = 'none';
+      logoutButton.style.display = 'inline-block';
+    } else {
+      loginButton.style.display = 'inline-block';
+      logoutButton.style.display = 'none';
+    }
+
+    logoutButton.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+
+      window.location.href = './index.html';
+    })
+  </script>
 </body>
 </html>

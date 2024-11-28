@@ -28,21 +28,24 @@ header {
 
 .header-list {
   display: flex;
-  justify-content: end;
+  align-items: center;
   gap: .5rem;
   list-style: none;
 }
 
-.login-button {
+.login-button,
+.logout-button {
   display: inline-block;
   background-color: rgb(124, 199, 245);
   border-radius: 1rem;
+  margin-left: auto;
   padding: 10px 20px;
-  text-decoration: none;
   color: black;
 }
 
-.login-button:hover {
+.login-button:hover,
+.logout-button:hover {
+  cursor: pointer;
   outline: 1px solid black;
 }
 
