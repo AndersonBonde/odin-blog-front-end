@@ -11,7 +11,8 @@ body {
 
 .container {
   --container-padding: 1rem;
-  width: 800px;
+  width: 70vw;
+  min-width: 800px;
   background-color: white;
   margin-inline: auto;
   border-radius: 10px;
@@ -54,8 +55,69 @@ header {
 */
 
 main {
+  display: flex;
+  gap: 12px;
   min-height: 80vh;
   padding: var(--container-padding);
+}
+
+.current-post {
+  flex: 1;
+  padding: 1rem;
+  outline: 1px solid tomato;
+}
+
+.current-post h2 {
+  font-size: 1.85rem;
+}
+
+.post-author {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: .35rem;
+}
+
+.posted-at {
+  font-weight: normal;
+}
+
+.post-content {
+  margin-block: .65rem;
+}
+
+.post-comments {
+  border-top: 1px solid black;
+  padding-top: .5rem;
+}
+
+.comment {
+  outline: 1px solid tomato;
+  padding-block: .5rem;
+}
+
+.comment-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-posted-at {
+  font-weight: normal;
+}
+
+.comment-content {
+  padding-top: .5rem;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  flex-basis: 240px;
+  padding: 1rem;
+  outline: 1px solid tomato;
 }
 
 /* 
@@ -96,6 +158,7 @@ footer {
 
 #login-form,
 #register-form {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }

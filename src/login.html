@@ -20,6 +20,7 @@
           <label for="password">Password</label>
           <input type="password" name="password" id="password" required>
         </div>
+        <p class="errors"></p>
         <p>
           If you don't have an account you can 
           <a href="./register.html">create one here</a>.
@@ -53,7 +54,8 @@
 
           window.location.href = './index.html';
         } else {
-          console.log('Login failed', data.message);
+          const errorsP = document.querySelector('.errors');
+          errorsP.textContent = data.message;
 
           loginForm.reset();
         }
