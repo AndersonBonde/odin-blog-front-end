@@ -50,9 +50,7 @@
         </div>
       </div>
       <ul class="post-list">
-        <li><a href="">First post - The post of posts too large to be on one line</a></li>
-        <li><a href="">Second post</a></li>
-        <li><a href="">Third post</a></li>
+        
       </ul>
     </main>
     <footer>
@@ -60,6 +58,55 @@
     </footer>
   </div>
   <script>
+    // Display blog post after clicking it's link
+    const postTitle = document.querySelector('.post-title');
+    const postAuthor = document.querySelector('.post-author');
+    const postContent = document.querySelector('.post-content');
+
+    function displayPost(post) {
+      const span = document.createElement('span');
+      span.classList.add('posted-at');
+
+      postTitle.textContent = post.title;
+      postAuthor.textContent = post.author.firstname + ' ' + post.author.lastname;
+      
+      span.textContent = new Date(post.uploadAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+      postAuthor.appendChild(span);
+
+      postContent.textContent = post.content;
+    }
+  </script>
+  <script>
+    // Load the list of blog posts
+    const postListUl = document.querySelector('.post-list');
+
+    fetch('http://localhost:3000/posts', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      data.blogPosts.forEach((post) => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+
+        link.textContent = post.title;
+        link.href = '/';
+        li.appendChild(link);
+        postListUl.appendChild(li);
+
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log(post);
+
+          displayPost(post);
+        });
+      });
+    })
+    .catch((err) => console.log(err));
+  </script>
+  <script>
+    // Display header information
     const token = localStorage.getItem('token');
     const loginButton = document.querySelector('.login-button');
     const logoutButton = document.querySelector('.logout-button');
