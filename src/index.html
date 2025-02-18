@@ -37,6 +37,12 @@
         </div>
         <div class="post-comments">
           <h4>Comments</h4>
+          <form id="comment-form">
+            <div class="form-item">
+              <textarea name="write-a-comment" id="write-a-comment" placeholder="Leave a comment"></textarea>
+            </div>
+            <button type="submit">Send</button>
+          </form>
           <div class="comment">
             <h4 class="comment-title">
               Comment title
@@ -58,7 +64,6 @@
     </footer>
   </div>
   <script>
-    // Display blog post after clicking it's link
     const postTitle = document.querySelector('.post-title');
     const postAuthor = document.querySelector('.post-author');
     const postContent = document.querySelector('.post-content');
@@ -87,6 +92,8 @@
     .then((response) => response.json())
     .then((data) => {
       data.blogPosts.forEach((post) => {
+        console.log(data.message);
+        
         const li = document.createElement('li');
         const link = document.createElement('a');
 

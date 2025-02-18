@@ -86,6 +86,10 @@ main {
   margin-block: .65rem;
 }
 
+/*
+** --- Comment Section
+*/
+
 .post-comments {
   border-top: 1px solid black;
   padding-top: .5rem;
@@ -118,6 +122,28 @@ main {
   flex-basis: 240px;
   padding: 1rem;
   outline: 1px solid tomato;
+}
+
+#comment-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#comment-form textarea {
+  border: none;
+  border-bottom: 1px solid grey;
+  outline: none;
+  padding: 6px 2px;
+  resize: none;
+  height: 32px;
+}
+
+#comment-form button {
+  background-color: lightgray;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  margin-top: -8px;
+  padding: 8px 16px;
 }
 
 /* 
