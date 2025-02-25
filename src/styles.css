@@ -95,12 +95,12 @@ main {
   padding-top: .5rem;
 }
 
-.comment {
-  outline: 1px solid tomato;
+.comment-card {
   padding-block: .5rem;
+  margin-block: .5rem;
 }
 
-.comment-title {
+.comment-author {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -43,14 +43,15 @@
             </div>
             <button type="submit">Send</button>
           </form>
-          <div class="comment">
-            <h4 class="comment-title">
-              Comment title
-              <span class="comment-posted-at">Posted at: 00-00-00</span>
-            </h4>
-            <h5>Comment author</h5>
-            <div class="comment-content">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius, rem. Laboriosam amet perspiciatis, eveniet minus nihil ad cupiditate consectetur accusamus unde totam! Quis vel ipsam id et, quo quod. Molestiae, id consectetur!
+          <div class="comments">
+            <div class="comment-card">
+              <h4 class="comment-author">
+                Comment author
+                <span class="comment-posted-at">Posted at: 00-00-00</span>
+              </h4>
+              <div class="comment-content">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius, rem. Laboriosam amet perspiciatis, eveniet minus nihil ad cupiditate consectetur accusamus unde totam! Quis vel ipsam id et, quo quod. Molestiae, id consectetur!
+              </div>
             </div>
           </div>
         </div>
@@ -64,6 +65,32 @@
     </footer>
   </div>
   <script>
+    const commentSection = document.querySelector('.comments');
+
+    function buildComment(comment) {
+      const commentDiv = document.createElement('div');
+      const authorH = document.createElement('h4');
+      const postedAtSpan = document.createElement('span');
+      const contentDiv = document.createElement('div');
+
+      commentDiv.classList.add('comment-card');
+      authorH.classList.add('comment-author');
+      postedAtSpan.classList.add('comment-posted-at');
+      contentDiv.classList.add('comment-content');
+
+      authorH.innerText = `${comment.author ? comment.author.firstname : 'anonymous'}`;
+      postedAtSpan.innerText = comment.uploadAt;
+      contentDiv.innerText = comment.content;
+
+      commentDiv.appendChild(authorH);
+      commentDiv.appendChild(contentDiv);
+      authorH.appendChild(postedAtSpan);
+
+      commentSection.appendChild(commentDiv);
+    }
+  </script>
+  <script>
+    // Display post info after clicking it's link
     const postTitle = document.querySelector('.post-title');
     const postAuthor = document.querySelector('.post-author');
     const postContent = document.querySelector('.post-content');
@@ -79,6 +106,21 @@
       postAuthor.appendChild(span);
 
       postContent.textContent = post.content;
+
+      // Load all comments
+      fetch(`http://localhost:3000/posts/${post.id}/comments`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        commentSection.innerHTML = '';
+
+        data.comments.forEach((comment) => {
+          buildComment(comment);
+        })
+      })
+      .catch((err) => console.log(err));
     }
   </script>
   <script>
@@ -92,8 +134,6 @@
     .then((response) => response.json())
     .then((data) => {
       data.blogPosts.forEach((post) => {
-        console.log(data.message);
-        
         const li = document.createElement('li');
         const link = document.createElement('a');
 
@@ -104,8 +144,8 @@
 
         link.addEventListener('click', (e) => {
           e.preventDefault();
-          console.log(post);
 
+          localStorage.setItem('post', JSON.stringify(post));
           displayPost(post);
         });
       });
@@ -142,6 +182,34 @@
 
     loginButton.addEventListener('click', (e) => {
       window.location.href = './login.html';
+    })
+  </script>
+  <script>
+    // Post a new comment
+    const commentForm = document.querySelector('#comment-form');
+
+    commentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const comment = document.getElementById('write-a-comment').value;
+      const postId = JSON.parse(localStorage.getItem('post')).id;
+      const user = JSON.parse(localStorage.getItem('user'));
+      const authorId = user ? user.id : undefined;
+      
+      console.log('Comment: ', comment, 'postId: ', postId, 'authorId: ', authorId);
+      
+      fetch('http://localhost:3000/posts/create/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment, postId, authorId })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message);
+      })
+      .catch((err) => console.log(err));
+
+      commentForm.reset();
     })
   </script>
 </body>
