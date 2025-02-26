@@ -1,3 +1,5 @@
+const { buildComment } = require('./commentSection');
+
 // Load the list of blog posts
 const postListUl = document.querySelector('.post-list');
 
@@ -30,6 +32,8 @@ fetch('http://localhost:3000/posts', {
 const postTitle = document.querySelector('.post-title');
 const postAuthor = document.querySelector('.post-author');
 const postContent = document.querySelector('.post-content');
+const commentSection = document.querySelector('.comments');
+
 
 function displayPost(post) {
   const span = document.createElement('span');

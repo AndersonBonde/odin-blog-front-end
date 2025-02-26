@@ -1,4 +1,5 @@
 // Build a comment dynamically
+const { DateTime } = require('luxon');
 const commentSection = document.querySelector('.comments');
 
 function buildComment(comment) {
@@ -13,7 +14,8 @@ function buildComment(comment) {
   contentDiv.classList.add('comment-content');
 
   authorH.innerText = `${comment.author ? comment.author.firstname : 'anonymous'}`;
-  postedAtSpan.innerText = comment.uploadAt;
+  const date = new Date(comment.uploadAt);
+  postedAtSpan.innerText = DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
   contentDiv.innerText = comment.content;
 
   commentDiv.appendChild(authorH);
@@ -49,3 +51,7 @@ commentForm.addEventListener('submit', (e) => {
 
   commentForm.reset();
 });
+
+module.exports = {
+  buildComment
+}
