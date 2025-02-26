@@ -13,45 +13,171 @@
 
         </li>
         <li class="login-button">
-          <a href="./login.html">Login</a>
+          Login
         </li>
         <li class="logout-button">
-          <a href="">Logout</a>
+          Logout
         </li>
       </ul>
     </header>
     <main>
-
+      <div class="current-post">
+        <h2 class="post-title">
+          Title
+        </h2>
+        <h3 class="post-author">
+          Author
+          <span class="posted-at">Posted at: 00-00-00</span>
+        </h3>
+        <div class="post-content">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati dicta provident ex, doloribus dolorem tempora quos ab voluptatum maiores sequi! Tempore, minima esse reiciendis, magnam quo sunt consectetur earum a tempora, incidunt iure laudantium dolor pariatur dolores quas cupiditate alias officiis molestiae eos facere illo! Impedit odit quidem quia officia possimus eos mollitia exercitationem accusantium illo, reiciendis dolor, perferendis doloremque libero aut amet provident?</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda neque officia, possimus modi voluptatibus velit repellat voluptatem, temporibus facere architecto nobis sapiente. Molestiae mollitia labore tempora ipsum recusandae impedit ad, dolorem suscipit ipsa corporis, optio eligendi asperiores esse repellat! Sapiente adipisci tempora rem numquam totam eveniet natus obcaecati id iusto voluptatem, repudiandae similique repellendus quidem itaque illo laboriosam a est, nostrum quos. Aliquid accusamus doloribus nam molestiae atque temporibus accusantium, ad vel. Officiis est, iusto magni eveniet reprehenderit doloribus porro! Eum, exercitationem.</p>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur ipsam eos eligendi pariatur ad iusto enim. Accusamus minus, aut ex aspernatur cum aperiam distinctio placeat quis eius, amet facilis ipsa voluptas tempore pariatur dicta dolorum veniam exercitationem beatae, facere omnis reprehenderit ad dolore. Assumenda consequuntur magni commodi culpa atque adipisci, autem quis facilis illum?</p>
+          <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere iste ullam suscipit quam, eaque quae exercitationem cum repellat reprehenderit ducimus eius nam hic vitae totam minima odit architecto sequi eum, accusantium adipisci nulla illo vel maiores. Modi, dolor? Veniam sed ullam assumenda, id atque ea voluptas libero. Nulla, dolore. Sed pariatur, blanditiis minus quis corrupti officia vel nemo illum iure fugit illo alias tenetur similique nisi magnam, sequi ea cum nihil placeat nam unde. Laboriosam, earum.</p>
+        </div>
+        <div class="post-comments">
+          <h4>Comments</h4>
+          <form id="comment-form">
+            <div class="form-item">
+              <textarea name="write-a-comment" id="write-a-comment" placeholder="Leave a comment"></textarea>
+            </div>
+            <button type="submit">Send</button>
+          </form>
+          <div class="comments">
+            <div class="comment-card">
+              <h4 class="comment-author">
+                Comment author
+                <span class="comment-posted-at">Posted at: 00-00-00</span>
+              </h4>
+              <div class="comment-content">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius, rem. Laboriosam amet perspiciatis, eveniet minus nihil ad cupiditate consectetur accusamus unde totam! Quis vel ipsam id et, quo quod. Molestiae, id consectetur!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="post-list">
+        
+      </ul>
     </main>
     <footer>
 
     </footer>
   </div>
   <script>
-    const token = localStorage.getItem('token');
-    const loginButton = document.querySelector('.login-button');
-    const logoutButton = document.querySelector('.logout-button');
-    const userInfo = document.querySelector('.user-info');
+    const commentSection = document.querySelector('.comments');
 
-    if (token) {
-      const user = JSON.parse(localStorage.getItem('user'));
+    function buildComment(comment) {
+      const commentDiv = document.createElement('div');
+      const authorH = document.createElement('h4');
+      const postedAtSpan = document.createElement('span');
+      const contentDiv = document.createElement('div');
 
-      userInfo.textContent = 'User: ' + user.firstname + ' ' + user.lastname;
+      commentDiv.classList.add('comment-card');
+      authorH.classList.add('comment-author');
+      postedAtSpan.classList.add('comment-posted-at');
+      contentDiv.classList.add('comment-content');
 
-      loginButton.style.display = 'none';
-      logoutButton.style.display = 'inline-block';
-    } else {
-      loginButton.style.display = 'inline-block';
-      logoutButton.style.display = 'none';
+      authorH.innerText = `${comment.author ? comment.author.firstname : 'anonymous'}`;
+      postedAtSpan.innerText = DateTime.fromJSDate(comment.uploadAt).toLocaleDateString(DateTime.DATETIME_MED_WITH_SECONDS);
+      contentDiv.innerText = comment.content;
+
+      commentDiv.appendChild(authorH);
+      commentDiv.appendChild(contentDiv);
+      authorH.appendChild(postedAtSpan);
+
+      commentSection.appendChild(commentDiv);
     }
+  </script>
+  <script>
+    // Display post info after clicking it's link
+    const postTitle = document.querySelector('.post-title');
+    const postAuthor = document.querySelector('.post-author');
+    const postContent = document.querySelector('.post-content');
 
-    logoutButton.addEventListener('click', (e) => {
+    function displayPost(post) {
+      const span = document.createElement('span');
+      span.classList.add('posted-at');
+
+      postTitle.textContent = post.title;
+      postAuthor.textContent = post.author.firstname + ' ' + post.author.lastname;
+      
+      span.textContent = new Date(post.uploadAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+      postAuthor.appendChild(span);
+
+      postContent.textContent = post.content;
+
+      // Load all comments
+      fetch(`http://localhost:3000/posts/${post.id}/comments`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        commentSection.innerHTML = '';
+
+        data.comments.forEach((comment) => {
+          buildComment(comment);
+        })
+      })
+      .catch((err) => console.log(err));
+    }
+  </script>
+  <script>
+    // Load the list of blog posts
+    const postListUl = document.querySelector('.post-list');
+
+    fetch('http://localhost:3000/posts', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      data.blogPosts.forEach((post) => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+
+        link.textContent = post.title;
+        link.href = '/';
+        li.appendChild(link);
+        postListUl.appendChild(li);
+
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          localStorage.setItem('post', JSON.stringify(post));
+          displayPost(post);
+        });
+      });
+    })
+    .catch((err) => console.log(err));
+  </script>
+  <script>
+    // Post a new comment
+    const commentForm = document.querySelector('#comment-form');
+
+    commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      
+      const comment = document.getElementById('write-a-comment').value;
+      const postId = JSON.parse(localStorage.getItem('post')).id;
+      const user = JSON.parse(localStorage.getItem('user'));
+      const authorId = user ? user.id : undefined;
+      
+      console.log('Comment: ', comment, 'postId: ', postId, 'authorId: ', authorId);
+      
+      fetch('http://localhost:3000/posts/create/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ comment, postId, authorId })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message);
+      })
+      .catch((err) => console.log(err));
 
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-
-      window.location.href = './index.html';
+      commentForm.reset();
     })
   </script>
 </body>
