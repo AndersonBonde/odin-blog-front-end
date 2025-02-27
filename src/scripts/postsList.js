@@ -9,7 +9,12 @@ fetch('http://localhost:3000/posts', {
 })
 .then((response) => response.json())
 .then((data) => {
-  data.blogPosts.forEach((post) => {
+  // Sort all posts to show most recent on top
+  const sorted = data.blogPosts.sort((a, b) => {
+    return new Date(b.uploadAt).getTime() - new Date(a.uploadAt).getTime();
+  });
+
+  sorted.forEach((post) => {
     const li = document.createElement('li');
     const link = document.createElement('a');
 
