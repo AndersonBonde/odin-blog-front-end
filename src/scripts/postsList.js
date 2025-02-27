@@ -30,6 +30,9 @@ fetch('http://localhost:3000/posts', {
       displayPost(post);
     });
   });
+
+  // Load first post after loading page for the first time
+  displayPost(sorted[0]);
 })
 .catch((err) => console.log(err));
 
