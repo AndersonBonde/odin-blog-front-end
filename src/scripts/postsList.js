@@ -14,6 +14,7 @@ fetch('http://localhost:3000/posts', {
     return new Date(b.uploadAt).getTime() - new Date(a.uploadAt).getTime();
   });
 
+  // Add eventListener to each link
   sorted.forEach((post) => {
     const li = document.createElement('li');
     const link = document.createElement('a');
@@ -31,7 +32,7 @@ fetch('http://localhost:3000/posts', {
     });
   });
 
-  // Load first post after loading page for the first time
+  // Load most recent post after loading page for the first time
   displayPost(sorted[0]);
 })
 .catch((err) => console.log(err));
@@ -41,7 +42,6 @@ const postTitle = document.querySelector('.post-title');
 const postAuthor = document.querySelector('.post-author');
 const postContent = document.querySelector('.post-content');
 const commentSection = document.querySelector('.comments');
-
 
 function displayPost(post) {
   const span = document.createElement('span');
@@ -55,7 +55,7 @@ function displayPost(post) {
 
   postContent.textContent = post.content;
 
-  // Load all comments
+  // Load all comments from clicked post
   fetch(`http://localhost:3000/posts/${post.id}/comments`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -67,6 +67,7 @@ function displayPost(post) {
     data.comments.forEach((comment) => {
       buildComment(comment);
     })
+    // TODO? Load comments by most recent first
   })
   .catch((err) => console.log(err));
 }
