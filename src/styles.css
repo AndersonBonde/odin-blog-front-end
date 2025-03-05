@@ -64,7 +64,6 @@ main {
 .current-post {
   flex: 1;
   padding: 1rem;
-  outline: 1px solid tomato;
 }
 
 .current-post h2 {
@@ -135,7 +134,7 @@ main {
   list-style: none;
   flex-basis: 240px;
   padding: 1rem;
-  outline: 1px solid tomato;
+  background-color: rgba(243, 243, 243, 0.25);
 }
 
 #comment-form {

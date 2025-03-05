@@ -41,7 +41,6 @@ function createAndDisplayLinks(allPosts) {
     link.addEventListener('click', (e) => {
       e.preventDefault();
   
-      localStorage.setItem('post', JSON.stringify(post));
       displayPost(post);
     });
   })
@@ -54,6 +53,8 @@ const postContent = document.querySelector('.post-content');
 const commentSection = document.querySelector('.comments');
 
 async function displayPost(post) {
+  localStorage.setItem('post', JSON.stringify(post));
+
   const span = document.createElement('span');
   span.classList.add('posted-at');
 
@@ -126,7 +127,6 @@ function buildComment(comment) {
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.message)
         const postId = JSON.parse(localStorage.getItem('post')).id;
         displayCommentsOnPage(postId);
       })
@@ -153,6 +153,8 @@ commentForm.addEventListener('submit', (e) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const authorId = user ? user.id : undefined;
   
+  if (comment === '') return;
+
   fetch('http://localhost:3000/posts/create/comment', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -160,7 +162,6 @@ commentForm.addEventListener('submit', (e) => {
   })
   .then((response) => response.json())
   .then((data) => {
-    console.log(data.message);
     displayCommentsOnPage(postId);
   })
   .catch((err) => console.log(err));
