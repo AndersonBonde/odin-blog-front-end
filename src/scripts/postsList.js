@@ -1,12 +1,3 @@
-async function loadSideBarLinks() {
-  const posts = await fetchAllBlogPosts();
-  createAndDisplayLinks(posts);
-
-  // Load most recent blogPost on first page load
-  displayPost(posts[0]);
-}
-loadSideBarLinks();
-
 async function fetchAllBlogPosts(sortedByDate = true) {
   return fetch('http://localhost:3000/posts', {
     method: 'GET',
@@ -21,74 +12,6 @@ async function fetchAllBlogPosts(sortedByDate = true) {
     }
 
     return posts = data.blogPosts;
-  })
-  .catch((err) => console.log(err));
-}
-
-function createAndDisplayLinks(allPosts) {
-  const postListUl = document.querySelector('.post-list');
-  postListUl.innerHTML = '';
-
-  allPosts.forEach((post) => {
-    const li = document.createElement('li');
-    const link = document.createElement('a');
-  
-    link.textContent = post.title;
-    link.href = '/';
-    li.appendChild(link);
-    postListUl.appendChild(li);
-  
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-  
-      displayPost(post);
-    });
-  })
-}
-
-// Display post info after clicking it's link
-const postTitle = document.querySelector('.post-title');
-const postAuthor = document.querySelector('.post-author');
-const postContent = document.querySelector('.post-content');
-const commentSection = document.querySelector('.comments');
-
-async function displayPost(post) {
-  localStorage.setItem('post', JSON.stringify(post));
-
-  const span = document.createElement('span');
-  span.classList.add('posted-at');
-
-  postTitle.textContent = post.title;
-  postAuthor.textContent = post.author.firstname + ' ' + post.author.lastname;
-  
-  span.textContent = new Date(post.uploadAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
-  postAuthor.appendChild(span);
-
-  postContent.textContent = post.content;
-
-  // Fetch and display comments from post
-  displayCommentsOnPage(post.id);
-}
-
-async function displayCommentsOnPage(postId) {
-  // Erase all
-  commentSection.innerHTML = '';
-  const comments = await fetchPostComments(postId);
-  
-  comments.forEach((comment) => {
-    buildComment(comment);
-  })
-}
-
-async function fetchPostComments(postId) {
-  // Fetch all comments from postId
-  return fetch(`http://localhost:3000/posts/${postId}/comments`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    return data = data.comments;
   })
   .catch((err) => console.log(err));
 }
@@ -141,6 +64,83 @@ function buildComment(comment) {
 
   commentSection.appendChild(commentDiv);
 }
+
+async function displayCommentsOnPage(postId) {
+  // Erase all
+  commentSection.innerHTML = '';
+  const comments = await fetchPostComments(postId);
+  
+  comments.forEach((comment) => {
+    buildComment(comment);
+  })
+}
+
+async function displayPost(post) {
+  localStorage.setItem('post', JSON.stringify(post));
+
+  const span = document.createElement('span');
+  span.classList.add('posted-at');
+
+  postTitle.textContent = post.title;
+  postAuthor.textContent = post.author.firstname + ' ' + post.author.lastname;
+  
+  span.textContent = new Date(post.uploadAt).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+  postAuthor.appendChild(span);
+
+  postContent.textContent = post.content;
+
+  // Fetch and display comments from post
+  displayCommentsOnPage(post.id);
+}
+
+function createAndDisplayLinks(allPosts) {
+  const postListUl = document.querySelector('.post-list');
+  postListUl.innerHTML = '';
+
+  allPosts.forEach((post) => {
+    const li = document.createElement('li');
+    const link = document.createElement('a');
+  
+    link.textContent = post.title;
+    link.href = '/';
+    li.appendChild(link);
+    postListUl.appendChild(li);
+  
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+  
+      displayPost(post);
+    });
+  })
+}
+
+async function fetchPostComments(postId) {
+  // Fetch all comments from postId
+  return fetch(`http://localhost:3000/posts/${postId}/comments`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    return data = data.comments;
+  })
+  .catch((err) => console.log(err));
+}
+
+// Display post info after clicking it's link
+const postTitle = document.querySelector('.post-title');
+const postAuthor = document.querySelector('.post-author');
+const postContent = document.querySelector('.post-content');
+const commentSection = document.querySelector('.comments');
+
+async function loadSideBarLinks() {
+  const posts = await fetchAllBlogPosts();
+  createAndDisplayLinks(posts);
+
+  // Load most recent blogPost on first page load
+  displayPost(posts[0]);
+}
+loadSideBarLinks();
 
 // Post a new comment
 const commentForm = document.querySelector('#comment-form');
